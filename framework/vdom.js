@@ -25,7 +25,6 @@ class VNode {
         return new VNode(tag, attrs, children);
     }
     render() {
-        console.log("hello from render method")
         const el = document.createElement(this.tag);
         for (const [key, value] of Object.entries(this.attrs)) {
             if (key === 'key') continue; // Skip key attribute
