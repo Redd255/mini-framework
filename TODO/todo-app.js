@@ -2,6 +2,7 @@ const ENTER_KEY = 13;
 const eventRegistry = new EventRegistry();
 eventRegistry.init();
 
+
 function App(state, setState) {
   const { todos, filter, input } = state;
 
@@ -13,10 +14,13 @@ function App(state, setState) {
 
   const activeTodoCount = todos.filter((t) => !t.completed).length;
   const completedCount = todos.length - activeTodoCount;
+  const allCompleted = todos.length > 0 && activeTodoCount === 0;
 
   // Create unique IDs for event handlers
   const inputKeyDownId = "keydown_" + Date.now();
   const inputOnInputId = "input_" + Date.now();
+  const toggleAllId = "toggle_all_" + Date.now();
+
   eventRegistry.register("keydown", inputKeyDownId, (e) => {
     if (e.keyCode === ENTER_KEY && input.trim()) {
       const newTodo = {
@@ -27,8 +31,18 @@ function App(state, setState) {
       setState({ todos: [...todos, newTodo], input: "" });
     }
   });
+
   eventRegistry.register("input", inputOnInputId, (e) => {
     setState({ input: e.target.value });
+  });
+
+  eventRegistry.register("change", toggleAllId, (e) => {
+    const shouldComplete = !allCompleted;
+    const newTodos = todos.map((todo) => ({
+      ...todo,
+      completed: shouldComplete,
+    }));
+    setState({ todos: newTodos });
   });
 
   return new VNode(
@@ -49,6 +63,14 @@ function App(state, setState) {
 
       todos.length > 0
         ? new VNode("section", { class: "main" }, [
+            new VNode("input", {
+              id: "toggle-all",
+              class: "toggle-all",
+              type: "checkbox",
+              checked: allCompleted,
+              "data-onchange": toggleAllId,
+            }),
+            new VNode("label", { for: "toggle-all" }, ["Mark all as complete"]),
             new VNode(
               "ul",
               { class: "todo-list" },
