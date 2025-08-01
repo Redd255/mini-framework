@@ -1,7 +1,7 @@
 class EventRegistry {
   constructor() {
     this.handlers = {};
-    this.supportedEvents = ["click", "keydown", "scroll", "dblclick", "input", "change"];
+    this.supportedEvents = ["click", "keydown", "scroll", "dblclick", "input", "change", "blur"];
     for (const type of this.supportedEvents) {
       this.handlers[type] = {};
     }
@@ -59,6 +59,6 @@ class EventRegistry {
     document.onscroll = (e) => self.dispatch("scroll", e);
     document.oninput = (e) => self.dispatch("input", e);
     document.onchange = (e) => self.dispatch("change", e);
+    document.onblur = (e) => self.dispatch("blur", e);
   }
 }
-
