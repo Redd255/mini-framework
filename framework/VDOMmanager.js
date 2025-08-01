@@ -60,10 +60,31 @@ function reconcileKeyedChildren(parentEl, newChildren, oldChildren) {
     oldChildren.some((child) => child?.attrs?.key != null);
 
   if (!hasKeys) {
-    // No keys - simple index-based diffing
-    const maxLength = Math.max(newChildren.length, oldChildren.length);
-    for (let i = 0; i < maxLength; i++) {
+    // No keys - CORRECTED simple index-based diffing
+    const newLen = newChildren.length;
+    const oldLen = oldChildren.length;
+    const commonLen = Math.min(newLen, oldLen);
+
+    // 1. Update the nodes that exist in both old and new VDOM
+    for (let i = 0; i < commonLen; i++) {
       updateElement(parentEl, newChildren[i], oldChildren[i], i);
+    }
+
+    // 2. Add any new nodes if the new list is longer
+    if (newLen > oldLen) {
+      for (let i = commonLen; i < newLen; i++) {
+        updateElement(parentEl, newChildren[i], null, i);
+      }
+    }
+    // 3. Remove surplus nodes if the old list was longer
+    else if (oldLen > newLen) {
+      // Iterate backwards to avoid issues with the live NodeList
+      for (let i = oldLen - 1; i >= newLen; i--) {
+        const childToRemove = parentEl.childNodes[i];
+        if (childToRemove) {
+          parentEl.removeChild(childToRemove);
+        }
+      }
     }
     return;
   }
