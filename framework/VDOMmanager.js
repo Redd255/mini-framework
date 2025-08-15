@@ -189,7 +189,7 @@ function updateAttributes(el, newAttrs = {}, oldAttrs = {}) {
     const oldVal = oldAttrs[key];
     if (newVal === oldVal) continue;
 
-    if (key.startsWith("on") && typeof value === "function") {
+    if (key.startsWith("on") && typeof newVal === "function") {
       const eventType = key.slice(2).toLowerCase();
       //could be a counter or UUID
       const handlerId = `${eventType}-${Math.random().toString(36).slice(2)}`;
