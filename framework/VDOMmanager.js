@@ -1,3 +1,5 @@
+import { EventRegistry } from './eventhandler.js';
+const EventRegistryInstance = new EventRegistry();
 export class VDOMManager {
   constructor(container, renderFn, initialState = {}) {
     this.container = container;
@@ -193,7 +195,7 @@ function updateAttributes(el, newAttrs = {}, oldAttrs = {}) {
       const eventType = key.slice(2).toLowerCase();
       //could be a counter or UUID
       const handlerId = `${eventType}-${Math.random().toString(36).slice(2)}`;
-      EventRegistryInstance.register(eventType, handlerId, value);
+      EventRegistryInstance.register(eventType, handlerId, newVal);
       el.setAttribute(`data-on${eventType}`, handlerId);
     } else if (key === "checked") {
       el.checked = Boolean(newVal);
