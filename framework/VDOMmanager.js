@@ -1,4 +1,4 @@
-class VDOMManager {
+export class VDOMManager {
   constructor(container, renderFn, initialState = {}) {
     this.container = container;
     this.oldVNode = null;
@@ -189,9 +189,12 @@ function updateAttributes(el, newAttrs = {}, oldAttrs = {}) {
     const oldVal = oldAttrs[key];
     if (newVal === oldVal) continue;
 
-    if (key.startsWith("on") && typeof newVal === "function") {
-      if (oldVal) el.removeEventListener(key.slice(2).toLowerCase(), oldVal);
-      el.addEventListener(key.slice(2).toLowerCase(), newVal);
+    if (key.startsWith("on") && typeof value === "function") {
+      const eventType = key.slice(2).toLowerCase();
+      //could be a counter or UUID
+      const handlerId = `${eventType}-${Math.random().toString(36).slice(2)}`;
+      EventRegistryInstance.register(eventType, handlerId, value);
+      el.setAttribute(`data-on${eventType}`, handlerId);
     } else if (key === "checked") {
       el.checked = Boolean(newVal);
     } else if (key === "value" && el.tagName === "INPUT") {

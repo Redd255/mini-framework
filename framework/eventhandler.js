@@ -1,4 +1,4 @@
-class EventRegistry {
+export class EventRegistry {
   constructor() {
     this.handlers = {};
     this.supportedEvents = ["click", "keydown", "scroll", "dblclick", "input", "change", "blur"];

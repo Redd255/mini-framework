@@ -1,4 +1,4 @@
-class Router {
+export class Router {
   constructor(routes, initialState = {}) {
     this.routes = routes;
     this.state = initialState;

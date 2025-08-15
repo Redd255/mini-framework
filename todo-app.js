@@ -1,3 +1,7 @@
+import { EventRegistry  } from './framework/eventhandler.js';
+import { VDOMManager  } from './framework/VDOMmanager.js';
+import { VNode } from './framework/vdom.js';
+import { Router} from './framework/router.js'
 const ENTER_KEY = 13;
 const ESCAPE_KEY = 27;
 const eventRegistry = new EventRegistry();
